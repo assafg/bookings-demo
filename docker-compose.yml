@@ -1,0 +1,45 @@
+## TODO - finish config
+version: "3.7"
+services:
+    webapp:
+        build: ./bookings-client
+        ports:
+            - '5000:5000'
+        depends_on:
+            - mongo
+            - listings-service
+        links:
+            - listings-service
+    
+    gql-endpoint:
+        build: ./listings-gql
+        ports:
+            - '4000:4000'
+        depends_on:
+            - mongo
+        links:
+            - mongo
+        environment: 
+            - MONGODB_URI='mongodb://mongo:27017'
+            - PORT=4000
+
+    listings-service:
+        build: ./listings-service
+        ports:
+            - '3000:3000'
+        depends_on:
+            - mongo
+        links:
+            - mongo
+        environment: 
+            - MONGODB_URI='mongodb://mongo:27017'
+            - PORT=3000
+    
+    mongo:
+        image: mongo:4.2.3
+        restart: always
+        volumes: 
+            - "../data:/var/data"
+        command: --dbpath /var/data
+        ports:
+            - 27017:27017
