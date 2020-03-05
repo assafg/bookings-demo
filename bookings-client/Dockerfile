@@ -10,13 +10,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends apt-transport-h
     mkdir /opt/bookings-client
 
 # https://www.aptible.com/documentation/faq/deploy/dockerfile-caching/npm-dockerfile-caching.html
-ADD package.json /opt/bookings-client
-ADD yarn.lock /opt/bookings-client
+ADD package.json yarn.lock /opt/bookings-client/
 WORKDIR /opt/bookings-client
 RUN yarn install
 
 ADD . /opt/bookings-client/
-
 RUN yarn build
 
 EXPOSE 5000

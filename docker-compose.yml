@@ -1,14 +1,22 @@
 ## TODO - finish config
 version: "3.7"
 services:
+
+    mongo:
+        image: mongo:4.2.3
+        restart: always
+        volumes:
+            - "../data:/var/data"
+        command: --dbpath /var/data
+        ports:
+            - 27017:27017
+
     webapp:
         build: ./bookings-client
         ports:
             - '5000:5000'
         depends_on:
             - mongo
-            - listings-service
-        links:
             - listings-service
     
     gql-endpoint:
@@ -17,9 +25,7 @@ services:
             - '4000:4000'
         depends_on:
             - mongo
-        links:
-            - mongo
-        environment: 
+        environment:
             - MONGODB_URI='mongodb://mongo:27017'
             - PORT=4000
 
@@ -29,17 +35,6 @@ services:
             - '3000:3000'
         depends_on:
             - mongo
-        links:
-            - mongo
-        environment: 
+        environment:
             - MONGODB_URI='mongodb://mongo:27017'
             - PORT=3000
-    
-    mongo:
-        image: mongo:4.2.3
-        restart: always
-        volumes: 
-            - "../data:/var/data"
-        command: --dbpath /var/data
-        ports:
-            - 27017:27017

@@ -8,8 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends apt-transport-h
     rm -rf /var/lib/apt/lists/* && \
     mkdir /opt/listings-gql
 
-ADD package.json /opt/listings-gql
-ADD yarn.lock /opt/listings-gql
+ADD package.json yarn.lock /opt/listings-gql/
 WORKDIR /opt/listings-gql
 RUN yarn install
 

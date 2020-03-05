@@ -9,8 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends apt-transport-h
     mkdir /opt/listings-service
 
 # https://www.aptible.com/documentation/faq/deploy/dockerfile-caching/npm-dockerfile-caching.html
-ADD package.json /opt/listings-service
-ADD yarn.lock /opt/listings-service
+ADD package.json yarn.lock /opt/listings-service/
 WORKDIR /opt/listings-service
 RUN yarn install
 
