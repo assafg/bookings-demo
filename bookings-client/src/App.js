@@ -10,6 +10,7 @@ function App() {
     return (
         <div className="App">
             <ApiProvider>
+                <h1>Ecme Bookings</h1>
                 <Router>
                     <Switch>
                         <Route path="/listing/:id" component={Listing} />
