@@ -4,6 +4,7 @@ set -e
 
 export DOCKER_REGISTRY=${DOCKER_REGISTRY:-52.17.169.90:5000}
 export BUILD_NUMBER=${BUILD_NUMBER:-1}
+export JOB_NAME=${JOB_NAME:-bookings-demo}
 
 BASE_VERSION=`cat version.txt`
 export BOOKING_DEMO_VERSION=${BASE_VERSION}.${BUILD_NUMBER}
@@ -39,9 +40,9 @@ docker-compose up -d
 sleep 20
 
 # echo "Load data"
-docker exec bookings-demo_mongo_1 mongorestore --gzip /var/backup
+docker exec ${JOB_NAME}_mongo_1 mongorestore --gzip /var/backup
 
-INTTEST=`curl -I -s http://localhost:5000/\#/0 | grep "200 OK" | wc -l`
+INTTEST=`curl -I -s http://localhost:5001/\#/0 | grep "200 OK" | wc -l`
 
 docker-compose stop
 docker-compose rm -f
@@ -57,6 +58,6 @@ else
 fi
 
 echo "Push docker images to the registry"
-# docker push ${DOCKER_REGISTRY}/tikalk/bookings-client:${BOOKING_DEMO_VERSION}
-# docker push ${DOCKER_REGISTRY}/tikalk/listings-gql:${BOOKING_DEMO_VERSION}
-# docker push ${DOCKER_REGISTRY}/tikalk/listings-gql:${BOOKING_DEMO_VERSION}
+docker push ${DOCKER_REGISTRY}/tikalk/bookings-client:${BOOKING_DEMO_VERSION}
+docker push ${DOCKER_REGISTRY}/tikalk/listings-gql:${BOOKING_DEMO_VERSION}
+docker push ${DOCKER_REGISTRY}/tikalk/listings-gql:${BOOKING_DEMO_VERSION}
